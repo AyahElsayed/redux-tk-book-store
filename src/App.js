@@ -10,6 +10,7 @@ const App = () => {
     <Fragment>
       <Header />
       <Container>
+        {/* AddForm and BookContainer as children for container */}
         <AddForm />
         <BookContainer />
       </Container>
