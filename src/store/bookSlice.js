@@ -13,7 +13,17 @@ const getBooks = createAsyncThunk('book/getBooks', async (_, thunkAPI) => {
 const bookSlice = createSlice({
   name: 'Book',
   initialState: { books: null },
-  reducers: {},
+  extraReducers: {
+    [getBooks.pending]: (state, action) => {
+      console.log(action)
+    },
+    [getBooks.fulfilled]: (state, action) => {
+      console.log(action)
+    },
+    [getBooks.rejected]: (state, action) => {
+      console.log(action)
+    }
+  },
 })
 
 export default bookSlice.reducer
