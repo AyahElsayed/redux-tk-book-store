@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-const getBooks = createAsyncThunk('book/getBooks', async (_, thunkAPI) => {
+export const getBooks = createAsyncThunk('book/getBooks', async (_, thunkAPI) => { // '_' mean that there is an arg but not used
   try {
     const res = await fetch('http://localhost:3005/books')
     const data = await res.json()
