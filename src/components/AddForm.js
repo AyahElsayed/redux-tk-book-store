@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { insrtBook } from '../store/bookSlice';
 
 
 const Addform = () => {
+  const { isLoggedIn } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
   const title = useRef('')
@@ -49,7 +50,7 @@ const Addform = () => {
               required
             ></textarea>
           </div>
-          <button type='submit' className='btn btn-primary'>
+          <button type='submit' className='btn btn-primary' disabled={!isLoggedIn}>
             Submit
           </button>
         </form>

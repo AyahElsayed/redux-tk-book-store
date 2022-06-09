@@ -9,6 +9,7 @@ import './book.css';
 const PostContainer = () => {
   const dispatch = useDispatch()
   const { isLoading, books } = useSelector((state) => state.books)
+  const { isLoggedIn } = useSelector((state) => state.auth)
 
   useEffect(() => {
     dispatch(getBooks())
@@ -19,7 +20,7 @@ const PostContainer = () => {
       <hr className='my-5' />
       <div className='row'>
         <div className='col'>
-          <BooksList isLoading={isLoading} books={books} />
+          <BooksList isLoading={isLoading} books={books} isLoggedIn={isLoggedIn} />
         </div>
         <div className='col side-line'>
           <BookInfo />
