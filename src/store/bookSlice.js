@@ -11,6 +11,23 @@ export const getBooks = createAsyncThunk('book/getBooks', async (_, thunkAPI) =>
   }
 })
 
+export const insrtBook = createAsyncThunk('book/insrtBook', async (bookData, thunkAPI) => {
+  const { rejectWithValue } = thunkAPI
+  try {
+    const res = await fetch('http://localhost:3005/books', {
+      method: 'POST',
+      body: JSON.stringify(bookData),
+      headers:{
+        'content-type':'application/json; charset=UTF-8'
+      }
+    })
+    const data = await res.json()
+    return data
+  } catch (error) {
+    return rejectWithValue(error.message)
+  }
+})
+
 const bookSlice = createSlice({
   name: 'Book',
   initialState: { books: [], isLoading: false, error: '' },
