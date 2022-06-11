@@ -12,13 +12,15 @@ export const getBooks = createAsyncThunk('book/getBooks', async (_, thunkAPI) =>
 })
 
 export const insrtBook = createAsyncThunk('book/insrtBook', async (bookData, thunkAPI) => {
-  const { rejectWithValue } = thunkAPI
+  const { rejectWithValue, getState } = thunkAPI
+  // getState can access to state
   try {
+    bookData.userName = getState().auth.name
     const res = await fetch('http://localhost:3005/books', {
       method: 'POST',
       body: JSON.stringify(bookData),
-      headers:{
-        'content-type':'application/json; charset=UTF-8'
+      headers: {
+        'content-type': 'application/json; charset=UTF-8'
       }
     })
     const data = await res.json()
@@ -28,10 +30,27 @@ export const insrtBook = createAsyncThunk('book/insrtBook', async (bookData, thu
   }
 })
 
+export const deleteBook = createAsyncThunk('book/deleteBook', async (id, thunkAPI) => {
+  const { rejectWithValue } = thunkAPI
+  try {
+    const res = await fetch(`http://localhost:3005/books/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json; charset=UTF-8'
+      },
+      
+    })
+    console.log('res',res)
+    return id
+  } catch (error) {
+    return rejectWithValue(error.message)
+  }
+})
 const bookSlice = createSlice({
   name: 'Book',
   initialState: { books: [], isLoading: false, error: '' },
   extraReducers: {
+    // get books
     [getBooks.pending]: (state, action) => {
       state.isLoading = true
       console.log(action)
@@ -46,6 +65,33 @@ const bookSlice = createSlice({
       state.error = action.payload
       console.log(action)
     }
+    ,
+    // insert a new book
+    [insrtBook.pending]: (state, action) => {
+      state.isLoading = true
+    },
+    [insrtBook.fulfilled]: (state, action) => {
+      state.isLoading = false
+      state.books.push(action.payload)
+    },
+    [insrtBook.rejected]: (state, action) => {
+      state.isLoading = false
+      state.error = action.payload
+    },
+    // delete Book
+    [deleteBook.pending]: (state, action) => {
+      state.isLoading = true
+    },
+    [deleteBook.fulfilled]: (state, action) => {
+      state.isLoading = false
+      state.books = state.books.filter((el) => el.id !== action.payload)
+      console.log(action)
+
+    },
+    [deleteBook.rejected]: (state, action) => {
+      state.isLoading = false
+      state.error = action.payload
+    },
   },
 })
 
